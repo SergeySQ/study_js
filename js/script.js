@@ -1,7 +1,7 @@
 let money = 3000, 
     income = 'фриланс', 
     addExpenses = 'Интернет, такси, коммуналка', 
-    deposit = 212.5, 
+    deposit = false, 
     mission = 200000, 
     period = 5,
     budgetDay = money/30;
