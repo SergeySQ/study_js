@@ -1,4 +1,4 @@
-let money = prompt("Ваш месячный доход?"),
+let money = +prompt("Ваш месячный доход?"),
   income = "фриланс",
   addExpenses = prompt(
     "Перечислите возможные расходы за рассчитываемый период через запятую"
@@ -15,9 +15,9 @@ console.log("Цель заработать " + mission + " рублей");
 console.log(addExpenses.toLowerCase().split(","));
 
 let expenses1 = prompt("Введите обязательную статью расходов?"),
-  amount1 = prompt("Во сколько это обойдется?"),
+  amount1 = +prompt("Во сколько это обойдется?"),
   expenses2 = prompt("Введите обязательную статью расходов?"),
-  amount2 = prompt("Во сколько это обойдется?");
+  amount2 = +prompt("Во сколько это обойдется?");
 
 budgetMonth = money - (amount1 + amount2);
 console.log("Бюджет на месяц:", budgetMonth);
