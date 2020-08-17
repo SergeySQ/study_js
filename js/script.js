@@ -13,7 +13,6 @@ let isStr = function (str) {
 
 let money,
 
-	//Функция спрашивает пользователя его доход за месяц
 	start = function () {
 		do {
 			money = prompt('Ваш месячный доход?', 30000);
@@ -76,7 +75,6 @@ let appData = {
 			appData.expenses[expensesName] = expensesAmount;
 		}
 	},
-	//Возвращает сумму всех обязательных расходов за месяц
 	getExpensesMonth: function () {
 		let accum = 0;
 		for (let key in appData.expenses) {
@@ -84,7 +82,6 @@ let appData = {
 		}
 		appData.expensesMonth = accum;
 	},
-	//Возвращает Накопления за месяц (Доходы минус расходы)
 	getBudget: function () {
 		appData.budgetMonth = appData.budget - appData.expensesMonth;
 		appData.budgetDay = Math.ceil(appData.budgetMonth / 30);
