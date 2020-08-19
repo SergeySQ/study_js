@@ -1,5 +1,4 @@
 'use strict';
-
 //Функция проверяет является числом или нет
 let isNumber = function (n) {
 	return !isNaN(parseFloat(n)) & isFinite(n);
@@ -10,6 +9,35 @@ let isStr = function (str) {
 	let reg = /^[a-zA-Zа-яА-Я ,]+$/;
 	return reg.test(str);
 };
+
+//Получить каждый элемент в отдельную переменную
+const buttonСalculate = document.getElementById('#start'),
+	buttonPlus = document.getElementsByTagName('button'),
+	buttonAddIncome = buttonPlus[0],
+	buttonAddExpenses = buttonPlus[1],
+	checkboxDeposit = document.querySelector('#deposit-check'),
+	inputAdditionalIncome = document.querySelectorAll('.additional_income-item'),
+	inputBudgetMonth = document.querySelector('.salary-amount'),
+	inputIncomeTitle = document.querySelector('.income-title'),
+	inputIncomeAmount = document.querySelector('.income-amount'),
+	inputExpensesTitle = document.querySelector('.expenses-title'),
+	expensesItems = document.querySelectorAll('.expenses-items'),
+	inputAdditionalExpensesItem = document.querySelector('.additional_expenses-item'),
+	inputTargetAmount = document.querySelector('.target-amount'),
+	rangePeriodSelect = document.querySelector('.period-select'),
+	resultBudgetMonth = document.getElementsByClassName('budget_month-value'),
+	resultBudgetDay = document.getElementsByClassName('budget_day-value'),
+	resultExpensesMonth = document.getElementsByClassName('expenses_month-value'),
+	resultAdditionalIncome = document.getElementsByClassName('additional_income-value'),
+	resultAdditionalExpenses = document.getElementsByClassName('additional_expenses-value'),
+	resultIncomePeriod = document.getElementsByClassName('income_period-value'),
+	resultTargetMonth = document.getElementsByClassName('target_month-value');
+
+
+
+
+
+
 
 let money,
 
@@ -117,14 +145,14 @@ let appData = {
 		return (appData.budgetMonth * appData.period);
 	}
 };
-
+appData.budget = start();
+console.log(appData.budget);
 appData.asking();
 console.log(appData.addExpenses);
 appData.getExpensesMonth();
 console.log('Расходы за месяц ' + appData.expensesMonth);
 
-appData.budget = start();
-console.log(appData.budget);
+
 
 appData.getBudget();
 appData.getInfoDeposite();
