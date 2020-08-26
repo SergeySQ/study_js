@@ -73,7 +73,7 @@ let appData = {
 		this.getAddIncome();
 		this.getBudget();
 		this.showReset();
-
+		console.log("this", this);
 		this.showResult();
 	},
 	//Вывод результатов вычислений в правую часть
@@ -97,7 +97,6 @@ let appData = {
 		incomePlus.disabled = true;
 		expensesPlus.disabled = true;
 		depositCheck.disabled = true;
-		periodSelect.disabled = true;
 		start.style.display = "none";
 		cancel.style.display = "block";
 	},
@@ -247,14 +246,32 @@ cancel.addEventListener("click", function () {
 	});
 	cancel.style.display = "none";
 	start.style.display = "block";
-	Object.values(incomeItem).slice(1).forEach(item => item.remove());
-	incomePlus.style.display = 'block';
+	Object.values(incomeItem)
+		.slice(1)
+		.forEach((item) => item.remove());
+	incomePlus.style.display = "block";
 
-	Object.values(expensesItems).slice(1).forEach(item => item.remove());
-	expensesPlus.style.display = 'block';
+	Object.values(expensesItems)
+		.slice(1)
+		.forEach((item) => item.remove());
+	expensesPlus.style.display = "block";
 
-	incomePlus.disabled = false;
-	expensesPlus.disabled = false;
+	start.style.display = "block";
+	cancel.style.display = "none";
+
+	appData.budget = 0;
+	appData.budgetDay = 0;
+	appData.budgetMonth = 0;
+	appData.expensesMonth = 0;
+	appData.income = {};
+	appData.incomeMonth = 0;
+	appData.addIncome = [];
+	appData.expenses = {};
+	appData.addExpenses = [];
+	appData.deposit = false;
+	appData.percentDeposit = 0;
+	appData.moneyDeposit = 0;
+	appData.period = 0;
 });
 salaryAmount.addEventListener("input", function () {
 	if (salaryAmount.value === "") {
@@ -313,3 +330,4 @@ console.log("Бюджет на день " + appData.budgetDay);
 console.log(
 	"Цель заработать " + appData.mission + " " + "рублей/долларов/гривен/юани"
 ); */
+console.log(this);
