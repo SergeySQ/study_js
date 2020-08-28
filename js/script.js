@@ -1,7 +1,6 @@
 "use strict";
 //Функция проверяет является числом или нет
 
-
 //Получить каждый элемент в отдельную переменную
 let start = document.getElementById("start"),
 	cancel = document.getElementById("cancel"),
@@ -37,7 +36,6 @@ let start = document.getElementById("start"),
 	periodSelect = document.querySelector(".period-select"),
 	incomeItem = document.querySelectorAll(".income-items"),
 	main = document.querySelector("main");
-
 
 class AppData {
 	constructor() {
@@ -83,12 +81,12 @@ class AppData {
 		budgetMonthValue.value = this.budgetMonth;
 		budgetDayValue.value = this.budgetDay;
 		expensesMonthValue.value = this.expensesMonth;
-		additionalExpensesValue.value = this.addExpenses.join(', ');
-		additionalIncomeValue.value = this.addIncome.join(', ');
+		additionalExpensesValue.value = this.addExpenses.join(", ");
+		additionalIncomeValue.value = this.addIncome.join(", ");
 		targetMonthValue.value = Math.ceil(this.getTargetMonth());
 		incomePeriodValue.value = this.calcPeriod();
 
-		periodSelect.addEventListener('input', function () {
+		periodSelect.addEventListener("input", () => {
 			incomePeriodValue.value = self.calcPeriod();
 		});
 
@@ -146,19 +144,21 @@ class AppData {
 	//Функция клонирует div.expenses-items по нажатию кнопки "+"
 	addExpensesBlock() {
 		let cloneExpensesItem = expensesItems[0].cloneNode(true);
-		expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesPlus);
-		expensesItems = document.querySelectorAll('.expenses-items');
+		expensesItems[0].parentNode.insertBefore(
+			cloneExpensesItem,
+			expensesPlus
+		);
+		expensesItems = document.querySelectorAll(".expenses-items");
 		if (expensesItems.length === 3) {
-			expensesPlus.style.display = 'none';
+			expensesPlus.style.display = "none";
 		}
-
 	}
 	getExpenses() {
 		const _this = this;
-		expensesItems.forEach(function (item) {
-			let itemExpenses = item.querySelector('.expenses-title').value;
-			let cashExpenses = item.querySelector('.expenses-amount').value;
-			if (itemExpenses !== '' && cashExpenses !== '') {
+		expensesItems.forEach((item) => {
+			let itemExpenses = item.querySelector(".expenses-title").value;
+			let cashExpenses = item.querySelector(".expenses-amount").value;
+			if (itemExpenses !== "" && cashExpenses !== "") {
 				_this.expenses[itemExpenses] = cashExpenses;
 			}
 		});
@@ -167,17 +167,17 @@ class AppData {
 	addIncomeBlock() {
 		let cloneIncomeItem = incomeItem[0].cloneNode(true);
 		incomeItem[0].parentNode.insertBefore(cloneIncomeItem, incomePlus);
-		incomeItem = document.querySelectorAll('.income-items');
+		incomeItem = document.querySelectorAll(".income-items");
 		if (incomeItem.length === 3) {
-			incomePlus.style.display = 'none';
+			incomePlus.style.display = "none";
 		}
 	}
 	getIncome() {
 		const _this = this;
-		incomeItem.forEach(function (item) {
-			let itemIncome = item.querySelector('.income-title').value;
-			let cashIncome = item.querySelector('.income-amount').value;
-			if (itemIncome !== '' && cashIncome !== '') {
+		incomeItem.forEach((item) => {
+			let itemIncome = item.querySelector(".income-title").value;
+			let cashIncome = item.querySelector(".income-amount").value;
+			if (itemIncome !== "" && cashIncome !== "") {
 				_this.income[itemIncome] = cashIncome;
 			}
 		});
@@ -189,27 +189,26 @@ class AppData {
 	//Получить возможные доходы
 	getAddIncome() {
 		const _this = this;
-		additionalIncomeItem.forEach(function (item) {
+		additionalIncomeItem.forEach((item) => {
 			let itemValue = item.value.trim();
-			if (itemValue !== '') {
+			if (itemValue !== "") {
 				_this.addIncome.push(itemValue);
 			}
 		});
 	}
 	//Получить возможные расходы
 	getAddExpenses() {
-		let addExpenses = additionalExpensesItem.value.split(',');
+		let addExpenses = additionalExpensesItem.value.split(",");
 		const _this = this;
-		addExpenses.forEach(function (item) {
+		addExpenses.forEach((item) => {
 			item = item.trim();
-			if (item !== '') {
+			if (item !== "") {
 				_this.addExpenses.push(item);
 			}
 		});
 	}
 	//Функция возвращает сумму всех обязательных расходов за месяц
 	getExpensesMonth() {
-
 		for (let key in this.expenses) {
 			this.expensesMonth += +this.expenses[key];
 		}
@@ -217,7 +216,6 @@ class AppData {
 	}
 	//Функция возвращает Накопления за месяц (Доходы минус расходы)
 	getBudget() {
-
 		this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
 		this.budgetDay = Math.floor(this.budgetMonth / 30);
 		return this.budgetMonth;
@@ -229,13 +227,13 @@ class AppData {
 	//Функция оценивает уровень дохода пользователя
 	getStatusIncome() {
 		if (this.budgetDay >= 1200) {
-			return 'У вас высокий уровень дохода';
-		} else if ((this.budgetDay < 1200) && (this.budgetDay > 600)) {
-			return 'У вас средний уровень дохода';
-		} else if ((this.budgetDay <= 600) && (this.budgetDay >= 0)) {
-			return 'К сожалению у вас уровень дохода ниже среднего';
+			return "У вас высокий уровень дохода";
+		} else if (this.budgetDay < 1200 && this.budgetDay > 600) {
+			return "У вас средний уровень дохода";
+		} else if (this.budgetDay <= 600 && this.budgetDay >= 0) {
+			return "К сожалению у вас уровень дохода ниже среднего";
 		} else {
-			return 'Что то пошло не так';
+			return "Что то пошло не так";
 		}
 	}
 	getInfoDeposit() {
@@ -245,12 +243,12 @@ class AppData {
 				this.percentDeposite = parseInt(
 					prompt("Какой у Вас годовой процент?", "10")
 				);
-			} while (!(self.isNumber(this.percentDeposite)));
+			} while (!self.isNumber(this.percentDeposite));
 			do {
 				this.moneyDeposite = parseInt(
 					prompt("Какая сумма заложена?", 10000)
 				);
-			} while (!(self.isNumber(this.moneyDeposite)));
+			} while (!self.isNumber(this.moneyDeposite));
 		}
 	}
 	//Функция выдвет информацию сколько можно накопить за опрделенный период
@@ -259,19 +257,16 @@ class AppData {
 	}
 	//Функция слушателей
 	eventListeners() {
+		//bind function 'start' with object 'appData'
+		start.addEventListener("click", this.start.bind(appData));
 
+		//bind function 'start' with object 'appData'
+		cancel.addEventListener("click", this.reset.bind(appData));
 
+		incomePlus.addEventListener("click", this.addIncomeBlock);
+		expensesPlus.addEventListener("click", this.addExpensesBlock);
 
-		//bind function 'start' with object 'appData' 
-		start.addEventListener('click', this.start.bind(appData));
-
-		//bind function 'start' with object 'appData' 
-		cancel.addEventListener('click', this.reset.bind(appData));
-
-		incomePlus.addEventListener('click', this.addIncomeBlock);
-		expensesPlus.addEventListener('click', this.addExpensesBlock);
-
-		periodSelect.addEventListener('input', function () {
+		periodSelect.addEventListener("input", () => {
 			periodAmount.textContent = periodSelect.value;
 		});
 
@@ -279,27 +274,32 @@ class AppData {
 		let inputName = document.querySelectorAll(
 				'input[placeholder = "Наименование"]'
 			),
-			inputAmount = document.querySelectorAll('input[placeholder = "Сумма"]');
+			inputAmount = document.querySelectorAll(
+				'input[placeholder = "Сумма"]'
+			);
 		const self = this;
 		inputName.forEach((item) => {
-			item.addEventListener("input", function (e) {
-				if (e.target.value !== "" && !(self.isStr(e.target.value))) {
-					alert("В данном поле допустимы только буквы русского алфавита!");
-					e.target.value = e.target.value.replace(/[^а-яА-Я ,]+$/g, "");
+			item.addEventListener("input", (e) => {
+				if (e.target.value !== "" && !self.isStr(e.target.value)) {
+					alert(
+						"В данном поле допустимы только буквы русского алфавита!"
+					);
+					e.target.value = e.target.value.replace(
+						/[^а-яА-Я ,]+$/g,
+						""
+					);
 				}
 			});
 		});
 
 		inputAmount.forEach((item) => {
-			item.addEventListener("input", function (e) {
-				if (e.target.value !== "" && !(self.isNumber(e.target.value))) {
+			item.addEventListener("input", (e) => {
+				if (e.target.value !== "" && !self.isNumber(e.target.value)) {
 					alert("В данном поле допустимы только цифры!");
 					e.target.value = e.target.value.replace(/[^\d]+$/g, "");
 				}
 			});
 		});
-
-
 	}
 }
 
@@ -307,12 +307,6 @@ const appData = new AppData();
 
 appData.eventListeners();
 console.log(appData);
-
-
-
-
-
-
 
 /* salaryAmount.addEventListener("input", function () {
 	if (salaryAmount.value === "") {
