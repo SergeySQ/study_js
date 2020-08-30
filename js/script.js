@@ -7,7 +7,7 @@ let start = document.getElementById("start"),
 	btnPlus = document.getElementsByTagName("button"),
 	incomePlus = btnPlus[0],
 	expensesPlus = btnPlus[1],
-	depositCheck = document.querySelector("#deposit-check"),
+	depositCheck = document.getElementById("deposit-check"),
 	additionalIncomeItem = document.querySelectorAll(".additional_income-item"),
 	budgetMonthValue = document.getElementsByClassName("budget_month-value")[0],
 	budgetDayValue = document.getElementsByClassName("budget_day-value")[0],
@@ -35,7 +35,9 @@ let start = document.getElementById("start"),
 	periodAmount = document.querySelector(".period-amount"),
 	periodSelect = document.querySelector(".period-select"),
 	incomeItem = document.querySelectorAll(".income-items"),
-	main = document.querySelector("main");
+	depositBank = document.querySelector(".deposit-bank"),
+	depositAmount = document.querySelector(".deposit-amount"),
+	depositPercent = document.querySelector(".deposit-percent");
 
 class AppData {
 	constructor() {
@@ -65,12 +67,16 @@ class AppData {
 	//Вызывается по клику "Расчитать"
 	start() {
 		this.budget = parseInt(salaryAmount.value);
-		this.getExpenses();
+
 		this.getIncome(Object.values(this.income));
+		this.getExpenses();
 		this.getExpensesMonth(Object.values(this.expenses));
+
 		this.getAddExpenses();
 		this.getAddIncome();
+		this.getInfoDeposit();
 		this.getBudget();
+		this.getTargetMonth();
 		this.showReset();
 		console.log("this", this);
 		this.showResult();
@@ -100,6 +106,7 @@ class AppData {
 		incomePlus.disabled = true;
 		expensesPlus.disabled = true;
 		depositCheck.disabled = true;
+		depositBank.disabled = true;
 		start.style.display = "none";
 		cancel.style.display = "block";
 	}
@@ -111,6 +118,13 @@ class AppData {
 		});
 		cancel.style.display = "none";
 		start.style.display = "block";
+
+		depositCheck.checked = false;
+		depositCheck.disabled = false;
+		depositBank.disabled = false;
+		depositPercent.style.display = "none";
+		depositBank.style.display = "none";
+		depositAmount.style.display = "none";
 		Object.values(incomeItem)
 			.slice(1)
 			.forEach((item) => item.remove());
@@ -216,9 +230,10 @@ class AppData {
 	}
 	//Функция возвращает Накопления за месяц (Доходы минус расходы)
 	getBudget() {
-		this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+		const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+		this.budgetMonth =
+			this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
 		this.budgetDay = Math.floor(this.budgetMonth / 30);
-		return this.budgetMonth;
 	}
 	//Подсчитывает за какой период будет достигнута цель
 	getTargetMonth() {
@@ -236,31 +251,67 @@ class AppData {
 			return "Что то пошло не так";
 		}
 	}
-	getInfoDeposit() {
-		const self = this;
-		if (this.deposit) {
-			do {
-				this.percentDeposite = parseInt(
-					prompt("Какой у Вас годовой процент?", "10")
-				);
-			} while (!self.isNumber(this.percentDeposite));
-			do {
-				this.moneyDeposite = parseInt(
-					prompt("Какая сумма заложена?", 10000)
-				);
-			} while (!self.isNumber(this.moneyDeposite));
-		}
-	}
 	//Функция выдвет информацию сколько можно накопить за опрделенный период
 	calcPeriod() {
 		return this.budgetMonth * periodSelect.value;
 	}
+	//Функция расчета депозита
+	getInfoDeposit() {
+		if (this.deposit) {
+			if (depositBank.value !== "other") {
+				this.percentDeposit = depositPercent.value;
+				this.moneyDeposite = depositAmount.value;
+			} else {
+				this.percentDeposit = depositPercent.value / 100;
+				this.moneyDeposite = depositAmount.value;
+			}
+		}
+	}
+
+	changePercent() {
+		const valueSelect = this.value;
+		if (valueSelect === "other") {
+			depositPercent.style.display = "inline-block";
+		} else {
+			depositPercent.value = valueSelect;
+		}
+	}
+	depositHandler() {
+		if (depositCheck.checked) {
+			depositBank.style.display = "inline-block";
+			depositAmount.style.display = "inline-block";
+			this.deposit = true;
+			depositBank.addEventListener("change", this.changePercent);
+		} else {
+			depositPercent.style.display = "none";
+			depositBank.style.display = "none";
+			depositAmount.style.display = "none";
+			depositPercent.value = "";
+			depositBank.value = "";
+			depositAmount.value = "";
+			this.deposit = false;
+			depositBank.removeEventListener("change", this.changePercent);
+		}
+	}
+
 	//Функция слушателей
 	eventListeners() {
-		//bind function 'start' with object 'appData'
+		//выключение кнопки рассчитать
+		start.disabled = true;
+		salaryAmount.addEventListener("input", () => {
+			start.disabled = salaryAmount.value === "";
+		});
+		depositPercent.addEventListener("input", (e) => {
+			if (depositPercent.value < 0 || depositPercent.value > 100) {
+				start.disabled = true;
+				alert("Введите корректное значение в поле проценты");
+			} else {
+				start.disabled = false;
+			}
+		});
+
 		start.addEventListener("click", this.start.bind(appData));
 
-		//bind function 'start' with object 'appData'
 		cancel.addEventListener("click", this.reset.bind(appData));
 
 		incomePlus.addEventListener("click", this.addIncomeBlock);
@@ -270,6 +321,15 @@ class AppData {
 			periodAmount.textContent = periodSelect.value;
 		});
 
+		depositCheck.addEventListener("change", this.depositHandler.bind(this));
+		//валидация инпута depositPercent
+
+		depositPercent.addEventListener("input", (e) => {
+			if (e.target.value !== "" && !this.isNumber(e.target.value)) {
+				e.target.value = e.target.value.replace(/[^\d]+$/g, "");
+				//start.disabled = true;
+			}
+		});
 		//Валидция полей
 		let inputName = document.querySelectorAll(
 				'input[placeholder = "Наименование"]'
@@ -327,7 +387,7 @@ for (let key in appData) {
 	console.log(key, appData[key]);
 }
  */
-/* console.log(appData.percentDeposite, appData.moneyDeposite, appData.calcSavedMoney());
+/* console.log(appData.percentDeposite, appData.moneyDeposit, appData.calcSavedMoney());
 console.log(appData.addExpenses.map(n => `${n[0].toUpperCase()}${n.slice(1)}`).join(', ')); */
 /* console.log("Бюджет на месяц " + appData.budgetMonth);
 console.log("Бюджет на день " + appData.budgetDay);
