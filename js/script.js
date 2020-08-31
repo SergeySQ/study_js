@@ -1,5 +1,5 @@
 "use strict";
-//Функция проверяет является числом или нет
+
 
 //Получить каждый элемент в отдельную переменную
 let start = document.getElementById("start"),
@@ -23,7 +23,7 @@ let start = document.getElementById("start"),
 	incomePeriodValue = document.getElementsByClassName(
 		"income_period-value"
 	)[0],
-	targetMonthValue = document.getElementsByClassName("target_month-value")[0],
+	targetMonthValue = document.getElementsByClassName('target_month-value')[0],
 	salaryAmount = document.querySelector(".salary-amount"),
 	incomeTitle = document.querySelector(".income-items .income-title"),
 	expensesTitle = document.querySelector(".expenses-items .expenses-title"),
@@ -78,7 +78,6 @@ class AppData {
 		this.getBudget();
 		this.getTargetMonth();
 		this.showReset();
-		console.log("this", this);
 		this.showResult();
 	}
 	//Вывод результатов вычислений в правую часть
@@ -93,10 +92,9 @@ class AppData {
 		incomePeriodValue.value = this.calcPeriod();
 
 		periodSelect.addEventListener("input", () => {
-			incomePeriodValue.value = self.calcPeriod();
+			incomePeriodValue.value = this.calcPeriod();
 		});
 
-		console.log(appData);
 	}
 	//Скрывает кнопку рассчитать и после этого мы показываем кнопку сброса 'reset' , потом отключаем все инпуты и плюсики и чекбоксы
 	showReset() {
@@ -187,12 +185,11 @@ class AppData {
 		}
 	}
 	getIncome() {
-		const _this = this;
 		incomeItem.forEach((item) => {
 			let itemIncome = item.querySelector(".income-title").value;
 			let cashIncome = item.querySelector(".income-amount").value;
 			if (itemIncome !== "" && cashIncome !== "") {
-				_this.income[itemIncome] = cashIncome;
+				this.income[itemIncome] = cashIncome;
 			}
 		});
 
@@ -237,7 +234,7 @@ class AppData {
 	}
 	//Подсчитывает за какой период будет достигнута цель
 	getTargetMonth() {
-		return targetAmount.value / this.getBudget();
+		return targetAmount.value / this.budgetMonth;
 	}
 	//Функция оценивает уровень дохода пользователя
 	getStatusIncome() {
@@ -302,11 +299,11 @@ class AppData {
 			start.disabled = salaryAmount.value === "";
 		});
 		depositPercent.addEventListener("input", (e) => {
-			if (depositPercent.value < 0 || depositPercent.value > 100) {
-				start.disabled = true;
+			depositPercent.value = depositPercent.value.replace(/\D/, '');
+			if (depositPercent.value < 1 || depositPercent.value >= 101) {
+
 				alert("Введите корректное значение в поле проценты");
-			} else {
-				start.disabled = false;
+				depositPercent.value = depositPercent.value.slice(0, -1);
 			}
 		});
 
